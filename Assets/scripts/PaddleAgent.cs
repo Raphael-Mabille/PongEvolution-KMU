@@ -3,62 +3,50 @@ using System.Collections.Generic;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
-using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PaddleAgent : Agent
+public class Paddle : Agent
 {
-    public bool isPlayer = true;
-
+    public GameObject player1;
+    public GameObject player2;
+    public float ballSpeed = 15f;
     Rigidbody rBody;
-
     public GameObject ball;
-    //private PlayerInput playerInput;
-    InputAction moveAction;
-
     public float speed = 10f;
 
     void Start()
     {
         rBody = GetComponent<Rigidbody>();
-        moveAction = InputSystem.actions.FindAction("Move");
-        //playerInput = GetComponent<PlayerInput>();
     }
 
-    void Update()
+    void SetRandomBallDirection()
     {
-
+        float randomX = Random.Range(-1f, 1f);
+        float randomZ = Random.Range(-1f, 1f);
+        Vector3 randomDirection = new Vector3(randomX, 0, randomZ).normalized;
+        ball.GetComponent<Rigidbody>().linearVelocity = randomDirection * ballSpeed;
     }
 
-    void FixedUpdate()
+    void ResetGamePositions()
     {
-        if (isPlayer)
-        {
-            Vector2 moveValue = moveAction.ReadValue<Vector2>();
+        player1.transform.position = new Vector3(0, 0.5f, 22);
+        player1.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        player1.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
-            //rBody.MovePosition(rBody.position + speed * Time.fixedDeltaTime * new Vector3(moveValue.y * -1, 0, 0));        
-            rBody.linearVelocity = new Vector3(moveValue.y * -speed, 0, 0);
-        } else
-        {
-            ;
-        }
-    }
+        player2.transform.position = new Vector3(0, 0.5f, -22);
+        player2.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        player2.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
-    void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("Kinematic object collided with: " + collision.gameObject.name);
-
-        /*if (collision.gameObject.CompareTag("border"))
-        {
-            rBody.linearVelocity = Vector3.zero;
-        }*/
-
-        // Add your collision handling logic here
+        ball.transform.position = new Vector3(0, 0.5f, 0);
+        ball.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        ball.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
     }
 
     public override void OnEpisodeBegin()
     {
-
+        print("Episode Begin");
+        ResetGamePositions();
+        SetRandomBallDirection();
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -75,20 +63,32 @@ public class PaddleAgent : Agent
         sensor.AddObservation(ball.GetComponent<Rigidbody>().linearVelocity.z); // 1
         // Total: 10
     }
-
-    public override void Heuristic(in ActionBuffers actionsOut)
-    {
-        var continuousActionsOut = actionsOut.ContinuousActions;
-        //var inputValue = playerInput.actions["Move"].ReadValue<float>();
-        //continuousActionsOut[0] = -inputValue;
-    }
-
     public override void OnActionReceived(ActionBuffers actions)
     {
+        print("Action Received");
         // Actions, size = 1
         var vectorAction = actions.ContinuousActions;
         Vector3 controlSignal = Vector3.zero;
-        controlSignal.x = vectorAction[0];
-        rBody.AddForce(controlSignal * 10);
+        controlSignal.y = vectorAction[0];
+        rBody.linearVelocity = new Vector3(controlSignal.y * speed, 0, 0);
+
+        SetReward(0.001f);
+
+        if (ball.transform.position.z < -25f)
+        {
+            SetReward(-1.0f);
+            EndEpisode();
+        } else if (ball.transform.position.z > 25f)
+        {
+            SetReward(1.0f);
+            EndEpisode();
+        }
+    }
+
+    
+    public override void Heuristic(in ActionBuffers actionsOut)
+    {
+        var continuousActionsOut = actionsOut.ContinuousActions;
+        continuousActionsOut[1] = -Input.GetAxis("Vertical");
     }
 }
