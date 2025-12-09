@@ -5,16 +5,55 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Rigidbody))]
 public class PaddleAgent : Agent
 {
+    public bool isPlayer = true;
+
     Rigidbody rBody;
 
     public GameObject ball;
-    private PlayerInput playerInput;
+    //private PlayerInput playerInput;
+    InputAction moveAction;
+
+    public float speed = 10f;
+
     void Start()
     {
         rBody = GetComponent<Rigidbody>();
-        playerInput = GetComponent<PlayerInput>();
+        moveAction = InputSystem.actions.FindAction("Move");
+        //playerInput = GetComponent<PlayerInput>();
+    }
+
+    void Update()
+    {
+
+    }
+
+    void FixedUpdate()
+    {
+        if (isPlayer)
+        {
+            Vector2 moveValue = moveAction.ReadValue<Vector2>();
+
+            //rBody.MovePosition(rBody.position + speed * Time.fixedDeltaTime * new Vector3(moveValue.y * -1, 0, 0));        
+            rBody.linearVelocity = new Vector3(moveValue.y * -speed, 0, 0);
+        } else
+        {
+            ;
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Kinematic object collided with: " + collision.gameObject.name);
+
+        /*if (collision.gameObject.CompareTag("border"))
+        {
+            rBody.linearVelocity = Vector3.zero;
+        }*/
+
+        // Add your collision handling logic here
     }
 
     public override void OnEpisodeBegin()
@@ -40,8 +79,8 @@ public class PaddleAgent : Agent
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         var continuousActionsOut = actionsOut.ContinuousActions;
-        var inputValue = playerInput.actions["Move"].ReadValue<float>();
-        continuousActionsOut[0] = -inputValue;
+        //var inputValue = playerInput.actions["Move"].ReadValue<float>();
+        //continuousActionsOut[0] = -inputValue;
     }
 
     public override void OnActionReceived(ActionBuffers actions)

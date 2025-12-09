@@ -43,15 +43,15 @@ public class GameManager : MonoBehaviour
 
     void ResetGamePositions()
     {
-        player1.transform.position = new Vector3(0, -22, 0);
+        player1.transform.position = new Vector3(0, 0.5f, 22);
         player1.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
         player1.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
-        player2.transform.position = new Vector3(0, 22, 0);
+        player2.transform.position = new Vector3(0, 0.5f, -22);
         player2.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
         player2.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
-        Ball.transform.position = Vector3.zero;
+        Ball.transform.position = new Vector3(0, 0.5f, 0);
         Ball.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
         Ball.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
     }
@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Ball.transform.position.y < -25f)
+        if (Ball.transform.position.z < -25f)
         {
             ResetGamePositions();
             scorePlayer1 += 1;
@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
             if (!IsGameOver()) {
                 Invoke("SetRandomBallDirection", 2f);
             }
-        } else if (Ball.transform.position.y > 25f)
+        } else if (Ball.transform.position.z > 25f)
         {
             ResetGamePositions();
             scorePlayer2 += 1;
