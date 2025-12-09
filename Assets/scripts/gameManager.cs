@@ -44,6 +44,11 @@ public class GameManager : MonoBehaviour
         {
             randomZ = Random.Range(-1f, 1f);
         }
+        // Make sure the ball doesn't take forever to reach the paddle
+        while (Mathf.Abs(randomZ) < 0.1f)
+        {
+            randomZ = Random.Range(-1f, 1f);
+        }
         Vector3 randomDirection = new Vector3(randomX, 0, randomZ).normalized;
 
         Ball.GetComponent<Rigidbody>().linearVelocity = randomDirection * ballSpeed;
