@@ -444,6 +444,8 @@ MonoBehaviour:
   scoreTextPlayer1: {fileID: 70807796}
   scoreTextPlayer2: {fileID: 319840082}
   Ball: {fileID: 407834095}
+  startDelay: 0
+  ballSpeed: 20
   player1: {fileID: 8372111203401307494}
   player2: {fileID: 771429673}
 --- !u!4 &140466850
@@ -886,7 +888,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 407834095}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 0.0000001
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -901,9 +903,9 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 116
+  m_Constraints: 4
   m_CollisionDetection: 0
 --- !u!135 &407834097
 SphereCollider:
@@ -912,7 +914,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 407834095}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 48d547b6bf98de34ba52d41e5bc525f3, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -921,7 +923,7 @@ SphereCollider:
     m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
-  m_ProvidesContacts: 0
+  m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.5
@@ -992,7 +994,7 @@ Transform:
   m_GameObject: {fileID: 407834095}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 1.99, y: 0.5, z: -0.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1360,8 +1362,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5570810811698148957, guid: f173a4b17ae4fc9439ea25d91a8e07c1, type: 3}
       propertyPath: m_Constraints
-      value: 12
+      value: 124
       objectReference: {fileID: 0}
+    - target: {fileID: 7172087958873397490, guid: f173a4b17ae4fc9439ea25d91a8e07c1, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 48d547b6bf98de34ba52d41e5bc525f3, type: 2}
     - target: {fileID: 8560641646431913785, guid: f173a4b17ae4fc9439ea25d91a8e07c1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -1438,7 +1444,9 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
+  isPlayer: 1
   ball: {fileID: 0}
+  speed: 10
 --- !u!114 &771429680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1611,7 +1619,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 14
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!65 &883297399
 BoxCollider:
@@ -1620,7 +1628,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 883297396}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 48d547b6bf98de34ba52d41e5bc525f3, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2023,7 +2031,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 14
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!65 &1021228666
 BoxCollider:
@@ -2032,7 +2040,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1021228663}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 48d547b6bf98de34ba52d41e5bc525f3, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2254,8 +2262,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5570810811698148957, guid: f173a4b17ae4fc9439ea25d91a8e07c1, type: 3}
       propertyPath: m_Constraints
-      value: 12
+      value: 124
       objectReference: {fileID: 0}
+    - target: {fileID: 5570810811698148957, guid: f173a4b17ae4fc9439ea25d91a8e07c1, type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7172087958873397490, guid: f173a4b17ae4fc9439ea25d91a8e07c1, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 48d547b6bf98de34ba52d41e5bc525f3, type: 2}
     - target: {fileID: 8560641646431913785, guid: f173a4b17ae4fc9439ea25d91a8e07c1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -2332,7 +2348,9 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
+  isPlayer: 1
   ball: {fileID: 0}
+  speed: 10
 --- !u!114 &8372111203401307501
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     private int scorePlayer1 = 0;
     private int scorePlayer2 = 0;
     public GameObject Ball;
+    public float startDelay = 2f;
+    public float ballSpeed = 10f;
 
     public GameObject player1;
     public GameObject player2;
@@ -30,15 +32,21 @@ public class GameManager : MonoBehaviour
     {
         ResetScores();
         ResetGamePositions();
-        Invoke("SetRandomBallDirection", 2f);
+        Invoke("SetRandomBallDirection", startDelay);
     }
 
     void SetRandomBallDirection()
     {
         float randomX = Random.Range(-1f, 1f);
         float randomZ = Random.Range(-1f, 1f);
+        // Make sure the ball doesn't go straight horizontally
+        while (randomZ == 0 && Mathf.Abs(randomX) == 1.0f)
+        {
+            randomZ = Random.Range(-1f, 1f);
+        }
         Vector3 randomDirection = new Vector3(randomX, 0, randomZ).normalized;
-        Ball.GetComponent<Rigidbody>().linearVelocity = randomDirection * 10f;
+
+        Ball.GetComponent<Rigidbody>().linearVelocity = randomDirection * ballSpeed;
     }
 
     void ResetGamePositions()
