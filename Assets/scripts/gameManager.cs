@@ -1,10 +1,13 @@
 using UnityEngine;
+using TMPro;
 
-public class gameManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
 
-    public int scorePlayer1 = 0;
-    public int scorePlayer2 = 0;
+    public TMP_Text scoreTextPlayer1;
+    public TMP_Text scoreTextPlayer2;
+    private int scorePlayer1 = 0;
+    private int scorePlayer2 = 0;
     public GameObject Ball;
 
     public GameObject player1;
@@ -18,6 +21,24 @@ public class gameManager : MonoBehaviour
     {
         scorePlayer1 = 0;
         scorePlayer2 = 0;
+
+        scoreTextPlayer1.text = scorePlayer1.ToString();
+        scoreTextPlayer2.text = scorePlayer2.ToString();
+    }
+
+    public void RestartGame()
+    {
+        ResetScores();
+        ResetGamePositions();
+        Invoke("SetRandomBallDirection", 2f);
+    }
+
+    void SetRandomBallDirection()
+    {
+        float randomX = Random.Range(-1f, 1f);
+        float randomZ = Random.Range(-1f, 1f);
+        Vector3 randomDirection = new Vector3(randomX, 0, randomZ).normalized;
+        Ball.GetComponent<Rigidbody>().linearVelocity = randomDirection * 10f;
     }
 
     void ResetGamePositions()
@@ -35,6 +56,11 @@ public class gameManager : MonoBehaviour
         Ball.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
     }
 
+    bool IsGameOver()
+    {
+        return scorePlayer1 >= 5 || scorePlayer2 >= 5;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -42,10 +68,18 @@ public class gameManager : MonoBehaviour
         {
             ResetGamePositions();
             scorePlayer1 += 1;
+            scoreTextPlayer1.text = scorePlayer1.ToString();
+            if (!IsGameOver()) {
+                Invoke("SetRandomBallDirection", 2f);
+            }
         } else if (Ball.transform.position.y > 25f)
         {
             ResetGamePositions();
             scorePlayer2 += 1;
+            scoreTextPlayer2.text = scorePlayer2.ToString();
+            if (!IsGameOver()) {
+                Invoke("SetRandomBallDirection", 2f);
+            }
         }
     }
 }
