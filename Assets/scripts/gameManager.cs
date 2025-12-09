@@ -11,12 +11,17 @@ public class GameManager : MonoBehaviour
     public GameObject Ball;
     public float startDelay = 2f;
     public float ballSpeed = 10f;
+    public bool autoStart = true;
+    public bool endOnScore = true;
 
     public GameObject player1;
     public GameObject player2;
     void Start()
     {
-        
+        if (autoStart)
+        {
+            RestartGame();
+        }
     }
 
     void ResetScores()
@@ -71,6 +76,9 @@ public class GameManager : MonoBehaviour
 
     bool IsGameOver()
     {
+        if (endOnScore == false) {
+            return false;
+        }
         return scorePlayer1 >= 5 || scorePlayer2 >= 5;
     }
 
@@ -83,7 +91,7 @@ public class GameManager : MonoBehaviour
             scorePlayer1 += 1;
             scoreTextPlayer1.text = scorePlayer1.ToString();
             if (!IsGameOver()) {
-                Invoke("SetRandomBallDirection", 2f);
+                Invoke("SetRandomBallDirection", startDelay);
             }
         } else if (Ball.transform.position.z > 25f)
         {
@@ -91,7 +99,7 @@ public class GameManager : MonoBehaviour
             scorePlayer2 += 1;
             scoreTextPlayer2.text = scorePlayer2.ToString();
             if (!IsGameOver()) {
-                Invoke("SetRandomBallDirection", 2f);
+                Invoke("SetRandomBallDirection", startDelay);
             }
         }
     }
